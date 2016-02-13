@@ -1,9 +1,13 @@
 package com.casino.uri.firebaseusers;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,24 +20,28 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
-    private Firebase mainReference;
-    private FirebaseConfig config;
+
+    boolean exists;
     private TextView information;
     private EditText emailLogin;
     private EditText passwordLogin;
     private EditText emailSignup;
     private EditText passwordSignup;
-    boolean exists = false;
 
+    private FirebaseConfig config;
+    private Firebase mainReference;
+    Firebase usersList;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("LOGIN OR SIGN UP");
         setSupportActionBar(toolbar);
         config = (FirebaseConfig) getApplication();
         mainReference = config.getMainReference();
+        usersList = mainReference.child("UsersList");
         information = (TextView) this.findViewById(R.id.TVinformation);
         emailLogin = (EditText) this.findViewById(R.id.ETemailLogin);
         passwordLogin = (EditText) this.findViewById(R.id.ETpasswordLogin);
@@ -41,30 +49,26 @@ public class LoginActivity extends AppCompatActivity {
         passwordSignup = (EditText) this.findViewById(R.id.ETpasswordSignup);
         Button login = (Button) this.findViewById(R.id.BTlogin);
         Button signup = (Button) this.findViewById(R.id.BTsignup);
-
         login.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 final String email = emailLogin.getText().toString();
                 final String password = passwordLogin.getText().toString();
 
                 mainReference.authWithPassword(email, password, new Firebase.AuthResultHandler() {
                     @Override
-                    public void onAuthenticated(AuthData authData)
-                    {
+                    public void onAuthenticated(AuthData authData) {
                         login(email, password, authData);
                     }
+
                     @Override
-                    public void onAuthenticationError(FirebaseError firebaseError)
-                    {
-                        information.setText("\n"+firebaseError.getMessage());
+                    public void onAuthenticationError(FirebaseError firebaseError) {
+                        information.setText("\n" + firebaseError.getMessage());
                     }
                 });
 
             }
         });
-
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,55 +77,56 @@ public class LoginActivity extends AppCompatActivity {
                 mainReference.createUser(email, password, new Firebase.ResultHandler() {
                     @Override
                     public void onSuccess() {
-                        information.setText("\nSuccesfully Created User \n\nEmail: " + email + "\nPassword: " + password);
+                        information.setText("\nSuccesfully Created User");
                     }
 
                     @Override
                     public void onError(FirebaseError firebaseError) {
-                        information.setText("\n" + firebaseError.getMessage());
+                        information.setText("\n"+firebaseError.getMessage());
                     }
                 });
             }
         });
     }
+
     public void login(final String email, final String password, final AuthData authData)
     {
-        final Firebase usersList = mainReference.child("UsersList");
-        usersList.addValueEventListener(new ValueEventListener() {
+        usersList.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                for (DataSnapshot usersSnapshot : snapshot.getChildren()) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     User user = usersSnapshot.getValue(User.class);
-                    if (user.getUID().equals(authData.getUid()))
-                    {
-                        config.setMainReference(usersList.child(user.getKey()));
+                    if (user.getUID().equals(authData.getUid())) {
                         exists = true;
+                        config.setMainReference(usersList.child(user.getKey()));
                     }
+                }
+                if (!exists) {
+                    Firebase userF = usersList.push();
+                    User newUser = new User();
+                    newUser.setKey(userF.getKey());
+                    newUser.setEmail(email);
+                    newUser.setPassword(password);
+                    newUser.setUID(authData.getUid());
+                    userF.setValue(newUser);
+                    config.setMainReference(usersList.child(userF.getKey()));
                 }
             }
             @Override
-            public void onCancelled(FirebaseError firebaseError) {}
+            public void onCancelled(FirebaseError firebaseError) {
+            }
         });
-        if (exists==false)
-        {
-            Firebase userF = usersList.push();
-            User newUser = new User();
-            newUser.setKey(userF.getKey());
-            newUser.setEmail(email);
-            newUser.setPassword(password);
-            newUser.setUID(authData.getUid());
-            userF.setValue(newUser);
-            config.setMainReference(usersList.child(userF.getKey()));
-            exists=false;
-        }
-        Intent startApp = new Intent(this, MainActivity.class);
-        startActivity(startApp);
+        Intent openApp = new Intent(this, MainActivity.class);
+        startActivity(openApp);
     }
     @Override
     protected void onStart() {
         super.onStart();
+        exists=false;
         emailLogin.setText("48089748z@iespoblenou.org");
         passwordLogin.setText("password");
+        emailLogin.setHint("Email");
+        passwordLogin.setHint("Password");
         emailSignup.setHint("Email");
         passwordSignup.setHint("Password");
     }

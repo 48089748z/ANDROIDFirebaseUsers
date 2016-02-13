@@ -7,97 +7,94 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_main" tools:context="com.casino.uri.firebaseusers.LoginActivity">
+    tools:showIn="@layout/activity_login" tools:context="com.casino.uri.firebaseusers.LoginActivity"
+    android:background="#ffffff">
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="95dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="LOGIN"
-        android:layout_alignParentTop="true"
+        android:text="Information"
+        android:id="@+id/TVinformation"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/textView" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ETemailLogin"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/textView"
-        android:hint="Email" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ETpasswordLogin"
-        android:layout_below="@+id/ETemailLogin"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/ETemailLogin"
-        android:hint="Password" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/BTlogin"
-        android:layout_below="@+id/ETpasswordLogin"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/BTlogin"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/ETpasswordLogin" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="SIGN UP"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/textView2" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ETemailSignup"
-        android:layout_below="@+id/textView3"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/textView3"
-        android:hint="Email" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ETpasswordSignup"
-        android:hint="Password"
-        android:layout_below="@+id/ETemailSignup"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/ETemailSignup" />
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SIGN UP"
         android:id="@+id/BTsignup"
-        android:layout_below="@+id/ETpasswordSignup"
+        android:layout_above="@+id/TVinformation"
         android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ETpasswordSignup"
+        android:layout_above="@+id/BTsignup"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/TVinformation"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:maxLines="1"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ETemailSignup"
+        android:hint="Email"
+        android:layout_above="@+id/ETpasswordSignup"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/ETpasswordSignup" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/TVinformation"
-        android:layout_below="@+id/BTsignup"
+        android:id="@+id/TVespacer"
+        android:layout_above="@+id/ETemailSignup"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/ETpasswordSignup"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignEnd="@+id/ETemailSignup" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LOGIN"
+        android:id="@+id/BTlogin"
+        android:layout_above="@+id/TVespacer"
+        android:layout_centerHorizontal="true"
+        />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ETpasswordLogin"
+        android:hint="Password"
+        android:layout_above="@+id/BTlogin"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/TVespacer"
+        android:inputType="textPassword"
+        android:maxLines="1"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ETemailLogin"
+        android:hint="Email"
+        android:layout_above="@+id/ETpasswordLogin"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/ETpasswordLogin"
+        android:maxLines="1"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/IVlogo"
+        android:layout_above="@+id/ETemailLogin"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/ETemailLogin"
+        android:src="@drawable/flamingtext_logo" />
 
 </RelativeLayout>
