@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_takephoto"
         android:orderInCategory="100"
-        android:title="Take Photo"
+        android:title="Camera"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_photo" />
 </menu>

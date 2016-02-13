@@ -6,14 +6,14 @@
     <item
         android:id="@+id/action_english"
         android:orderInCategory="100"
-        android:title="New Note"
+        android:title="English"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_english" />
 
     <item
         android:id="@+id/action_spanish"
         android:orderInCategory="100"
-        android:title="Delete"
+        android:title="Spanish"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_spanish"/>
 </menu>
