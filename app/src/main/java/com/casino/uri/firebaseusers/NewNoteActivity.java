@@ -22,23 +22,37 @@ import java.io.File;
 
 public class NewNoteActivity extends AppCompatActivity  implements LocationListener
 {
-    private boolean tookPhoto = false;
-    private Location loc;
-    private ProgressDialog dialog;
-    private ImageView takenPhoto;
+    FirebaseConfig config;
+    boolean tookPhoto = false;
+    Location loc;
+    ProgressDialog dialog;
+    ImageView takenPhoto;
+    TextView title;
+    TextView description;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_note);
-
+        config  = (FirebaseConfig) this.getApplication();
         takenPhoto = (ImageView) this.findViewById(R.id.IVtakenPhoto);
-        Picasso.with(this).load(R.drawable.noimage).fit().into(takenPhoto);
-        dialog = ProgressDialog.show(this, "  TURN ON YOUR GPS PLEASE","We are getting your location.\nThis may take a few seconds.");
+        title = (TextView) this.findViewById(R.id.ETtitle);
+        description = (TextView) this.findViewById(R.id.ETdescription);
+        Picasso.with(this).load(R.drawable.empty).fit().into(takenPhoto);
+        if(config.getLanguage().equals("SPANISH"))
+        {
+            dialog = ProgressDialog.show(this,"    ENCIENDE EL GPS","Intentamos localizarte.\nEsto puede tardar unos segundos.");
+            title.setHint("Titulo de la Nota");
+            description.setHint("Descripción");
+        }
+        else
+        {
+            dialog = ProgressDialog.show(this, "  TURN ON YOUR GPS PLEASE","We are getting your location.\nThis may take a few seconds.");
+            title.setHint("Note Title");
+            description.setHint("Note Description");
+        }
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        final TextView title = (TextView) this.findViewById(R.id.ETtitle);
-        final TextView description = (TextView) this.findViewById(R.id.ETdescription);
 
         FloatingActionButton add = (FloatingActionButton) this.findViewById(R.id.fab);
         add.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +87,6 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
     }
     public void addNoteToFireBase(Note note)
     {
-        FirebaseConfig config  = (FirebaseConfig) this.getApplication();
         Firebase ref = config.getMainReference();
         Firebase notesReference = ref.child("NotesList");
         Firebase fnote = notesReference.push();

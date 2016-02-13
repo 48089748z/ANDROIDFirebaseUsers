@@ -18,7 +18,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 {
-    private FirebaseConfig config = null;
+    FirebaseConfig config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +34,16 @@ public class MainActivity extends AppCompatActivity
     }
     private void setupViewPager(CustomViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new NotesFragment(), "NOTES");
-        adapter.addFragment(new MapFragment(), "MAP");
+        if (config.getLanguage().equals("SPANISH"))
+        {
+            adapter.addFragment(new NotesFragment(), "NOTAS");
+            adapter.addFragment(new MapFragment(), "MAPA");
+        }
+        else
+        {
+            adapter.addFragment(new NotesFragment(), "NOTES");
+            adapter.addFragment(new MapFragment(), "MAP");
+        }
         viewPager.setAdapter(adapter);
         viewPager.setPagingEnabled(false);
     }
@@ -88,8 +96,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_delete) {
-            showAlert();
+        if (id == R.id.action_delete)
+        {
+            if (config.getLanguage().equals("SPANISH"))
+            {
+                mostrarAlerta();
+            }
+            else {showAlert();}
             return true;
         }
         if (id == R.id.action_newnote) {
@@ -98,5 +111,23 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void mostrarAlerta()
+    {
+        new AlertDialog.Builder(this)
+                .setTitle(" BORRAR TODAS LAS NOTAS?")
+                .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        Firebase mainReference = config.getMainReference();
+                        Firebase notes = mainReference.child("NotesList");
+                        notes.removeValue();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which){}
+                })
+                .setIcon(R.drawable.ic_alert)
+                .show();
     }
 }

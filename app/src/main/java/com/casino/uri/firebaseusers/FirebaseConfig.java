@@ -7,6 +7,7 @@ import com.firebase.client.Firebase;
 public class FirebaseConfig extends Application
 {
     private Firebase mainReference;
+    private String language = "ENGLISH";
     @Override
     public void onCreate()
     {
@@ -18,9 +19,14 @@ public class FirebaseConfig extends Application
     public Firebase getMainReference() {
         return mainReference;
     }
-
     public void setMainReference(Firebase mainReference) {
         this.mainReference = mainReference;
+    }
+    public String getLanguage() {
+        return language;
+    }
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }
 
