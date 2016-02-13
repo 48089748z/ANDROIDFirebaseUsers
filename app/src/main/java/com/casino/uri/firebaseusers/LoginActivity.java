@@ -1,27 +1,31 @@
 package com.casino.uri.firebaseusers;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-public class LoginActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class LoginActivity extends AppCompatActivity
+{
+    ProgressDialog progress;
+    Boolean userIsSavedOnFireBase = false;
+    ArrayList<User> usersList = new ArrayList<>();
     Button login;
     Button signup;
     Toolbar toolbar;
-    boolean exists;
     TextView information;
     EditText emailLogin;
     EditText passwordLogin;
@@ -29,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText passwordSignup;
     FirebaseConfig config;
     Firebase mainReference;
-    Firebase usersList;
+    Firebase usersListReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -39,10 +43,13 @@ public class LoginActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         config = (FirebaseConfig) getApplication();
         mainReference = config.getMainReference();
-        usersList = mainReference.child("UsersList");
-
+        usersListReference = config.getUsersListReference();
         toolbar.setTitle("LOGIN OR SIGN UP");
         setSupportActionBar(toolbar);
+        progress = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
+        progress.setTitle("           LOGGING IN");
+        progress.setMessage("Please wait a few seconds...");
+        progress.setCancelable(false);
         information = (TextView) this.findViewById(R.id.TVinformation);
         emailLogin = (EditText) this.findViewById(R.id.ETemailLogin);
         passwordLogin = (EditText) this.findViewById(R.id.ETpasswordLogin);
@@ -50,23 +57,27 @@ public class LoginActivity extends AppCompatActivity {
         passwordSignup = (EditText) this.findViewById(R.id.ETpasswordSignup);
         login = (Button) this.findViewById(R.id.BTlogin);
         signup = (Button) this.findViewById(R.id.BTsignup);
-        login.setOnClickListener(new View.OnClickListener() {
+
+        usersListReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                final String email = emailLogin.getText().toString();
-                final String password = passwordLogin.getText().toString();
-                mainReference.authWithPassword(email, password, new Firebase.AuthResultHandler() {
-                    @Override
-                    public void onAuthenticated(AuthData authData) {
-                        login(email, password, authData);
-                    }
-
-                    @Override
-                    public void onAuthenticationError(FirebaseError firebaseError) {
-                        information.setText("\n" + firebaseError.getMessage());
-                    }
-                });
-
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                usersList.clear();
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren())
+                {
+                    User user = userSnapshot.getValue(User.class);
+                    usersList.add(user);
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {}
+        });
+        login.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                login();
             }
         });
         signup.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                     {
                         information.setText("\nSuccesfully Created User");
                     }
-
                     @Override
                     public void onError(FirebaseError firebaseError)
                     {
@@ -90,44 +100,57 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-    public void login(final String email, final String password, final AuthData authData)
+    public void login()
     {
-        usersList.addListenerForSingleValueEvent(new ValueEventListener() {
+        final String email = emailLogin.getText().toString();
+        final String password = passwordLogin.getText().toString();
+        mainReference.authWithPassword(email, password, new Firebase.AuthResultHandler() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
-                    User user = usersSnapshot.getValue(User.class);
-                    if (user.getUID().equals(authData.getUid()))
+            public void onAuthenticated(AuthData authData)
+            {
+                progress.show();
+                for (int x = 0; x < usersList.size(); x++)
+                {
+                    if (usersList.get(x).getUID().equals(authData.getUid()))
                     {
-                        exists = true;
-                        config.setMainReference(usersList.child(user.getKey()));
+                        config.setLoggedUserReference(usersListReference.child(usersList.get(x).getKey()));
+                        userIsSavedOnFireBase = true;
+                    }
+                    else
+                    {
+                        userIsSavedOnFireBase = false;
                     }
                 }
-                Log.w("LOG: ", String.valueOf(exists));
-                if (!exists) {
-                    Firebase userF = usersList.push();
+                if (!userIsSavedOnFireBase)
+                {
+                    Firebase userF = usersListReference.push();
                     User newUser = new User();
                     newUser.setKey(userF.getKey());
                     newUser.setEmail(email);
                     newUser.setPassword(password);
                     newUser.setUID(authData.getUid());
                     userF.setValue(newUser);
-                    config.setMainReference(usersList.child(userF.getKey()));
+                    config.setLoggedUserReference(usersListReference.child(userF.getKey()));
                 }
+                startMainActivity();
             }
             @Override
-            public void onCancelled(FirebaseError firebaseError) {
+            public void onAuthenticationError(FirebaseError firebaseError)
+            {
+                information.setText("\n" + firebaseError.getMessage());
             }
         });
-        Intent openApp = new Intent(this, MainActivity.class);
-        startActivity(openApp);
+    }
+    public void startMainActivity()
+    {
+        Intent startMainActivity = new Intent(this, MainActivity.class);
+        startActivity(startMainActivity);
     }
     @Override
     protected void onStart()
     {
         super.onStart();
-        exists=false;
+        progress.hide();
         emailLogin.setText("48089748z@iespoblenou.org");
         emailSignup.setHint("Email");
         if (config.getLanguage().equals("SPANISH"))
@@ -158,7 +181,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
     public void setSpanish()
     {
         toolbar.setTitle("ACCEDE O REGISTRATE");

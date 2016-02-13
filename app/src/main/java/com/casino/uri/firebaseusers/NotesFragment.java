@@ -16,7 +16,8 @@ import java.io.File;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NotesFragment extends Fragment {
+public class NotesFragment extends Fragment
+{
     FirebaseConfig config;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -24,34 +25,23 @@ public class NotesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ListView notesList = (ListView) view.findViewById(R.id.LVnotes);
         config  = (FirebaseConfig) getActivity().getApplication();
-        Firebase mainReference = config.getMainReference();
-        Firebase notesReference = mainReference.child("NotesList");
-        FirebaseListAdapter<Note> adapter = new FirebaseListAdapter<Note>(getActivity(), Note.class, R.layout.listview_layout, notesReference) {
+        Firebase loggedUserNotesReference = config.getLoggedUserReference().child("NotesList");
+        FirebaseListAdapter<Note> adapter = new FirebaseListAdapter<Note>(getActivity(), Note.class, R.layout.listview_layout, loggedUserNotesReference) {
             @Override
-            protected void populateView(View view, Note note, int position) {
+            protected void populateView(View view, Note note, int position)
+            {
                 TextView title = (TextView) view.findViewById(R.id.TVtitle);
                 TextView description = (TextView) view.findViewById(R.id.TVdescription);
                 TextView latlng = (TextView) view.findViewById(R.id.TVlatlng);
                 ImageView image = (ImageView) view.findViewById(R.id.IVimage);
                 title.setText(note.getTitle());
                 description.setText(note.getDescription());
-                if (config.getLanguage().equals("SPANISH"))
-                {
-                    latlng.setText("Latitud: " + note.getLatitude() + "\nLongitud: " + note.getLongitude());
-                }
-                else
-                {
-                    latlng.setText("Latitude: " + note.getLatitude() + "\nLongitude: " + note.getLongitude());
-                }
-                if (note.getImagePath()==null)
-                {
-                    Picasso.with(getContext()).load(R.drawable.emptyimage).fit().into(image);
-                }
-                else
-                {
+                try {
                     File imagePath = new File(note.getImagePath());
                     Picasso.with(getContext()).load(imagePath).centerCrop().resize(185, 185).into(image);
-                }
+                } catch (Exception e){}
+                if (config.getLanguage().equals("SPANISH")) {latlng.setText("Latitud: " + note.getLatitude() + "\nLongitud: " + note.getLongitude());}
+                else {latlng.setText("Latitude: " + note.getLatitude() + "\nLongitude: " + note.getLongitude());}
             }
         };
         notesList.setAdapter(adapter);

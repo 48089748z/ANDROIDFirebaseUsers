@@ -63,10 +63,7 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
                 newNote.setDescription(description.getText().toString());
                 newNote.setLatitude(String.valueOf(loc.getLatitude()));
                 newNote.setLongitude(String.valueOf(loc.getLongitude()));
-                if(tookPhoto)
-                {
-                    newNote.setImagePath(getLastPhotoPath());
-                }
+                newNote.setImagePath(getLastPhotoPath());
                 addNoteToFireBase(newNote);
             }
         });
@@ -86,9 +83,8 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
     }
     public void addNoteToFireBase(Note note)
     {
-        Firebase ref = config.getMainReference();
-        Firebase notesReference = ref.child("NotesList");
-        Firebase fnote = notesReference.push();
+        Firebase loggedUserNotesReference = config.getLoggedUserReference().child("NotesList");
+        Firebase fnote = loggedUserNotesReference.push();
         fnote.setValue(note);
         this.finish();
     }
