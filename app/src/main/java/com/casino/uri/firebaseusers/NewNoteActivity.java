@@ -38,7 +38,6 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
         takenPhoto = (ImageView) this.findViewById(R.id.IVtakenPhoto);
         title = (TextView) this.findViewById(R.id.ETtitle);
         description = (TextView) this.findViewById(R.id.ETdescription);
-        Picasso.with(this).load(R.drawable.empty).fit().into(takenPhoto);
         if(config.getLanguage().equals("SPANISH"))
         {
             dialog = ProgressDialog.show(this,"    ENCIENDE EL GPS","Intentamos localizarte.\nEsto puede tardar unos segundos.");

@@ -45,7 +45,7 @@ public class NotesFragment extends Fragment {
                 }
                 if (note.getImagePath()==null)
                 {
-                    Picasso.with(getContext()).load(R.drawable.empty).fit().into(image);
+                    Picasso.with(getContext()).load(R.drawable.emptyimage).fit().into(image);
                 }
                 else
                 {
