@@ -43,7 +43,7 @@
         android:layout_width="290dp"
         android:layout_height="230dp"
         android:id="@+id/IVtakenPhoto"
-        android:src="@drawable/noimage"
+        android:src="@drawable/empty"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
