@@ -1,5 +1,7 @@
 package com.casino.uri.firebaseusers;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,15 +11,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-
 import java.util.ArrayList;
-
 public class LoginActivity extends AppCompatActivity
 {
     ProgressDialog progress;
@@ -26,7 +25,6 @@ public class LoginActivity extends AppCompatActivity
     Button login;
     Button signup;
     Toolbar toolbar;
-    TextView information;
     EditText emailLogin;
     EditText passwordLogin;
     EditText emailSignup;
@@ -50,7 +48,6 @@ public class LoginActivity extends AppCompatActivity
         progress.setTitle("           LOGGING IN");
         progress.setMessage("Please wait a few seconds...");
         progress.setCancelable(false);
-        information = (TextView) this.findViewById(R.id.TVinformation);
         emailLogin = (EditText) this.findViewById(R.id.ETemailLogin);
         passwordLogin = (EditText) this.findViewById(R.id.ETpasswordLogin);
         emailSignup = (EditText) this.findViewById(R.id.ETemailSignup);
@@ -89,12 +86,12 @@ public class LoginActivity extends AppCompatActivity
                     @Override
                     public void onSuccess()
                     {
-                        information.setText("\nSuccesfully Created User");
+                        showInformation("DONE", "Succesfully Created User.");
                     }
                     @Override
                     public void onError(FirebaseError firebaseError)
                     {
-                        information.setText("\n"+firebaseError.getMessage());
+                        showAlert("ERROR", firebaseError.getMessage());
                     }
                 });
             }
@@ -138,7 +135,7 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onAuthenticationError(FirebaseError firebaseError)
             {
-                information.setText("\n" + firebaseError.getMessage());
+                showAlert("ERROR", firebaseError.getMessage());
             }
         });
     }
@@ -185,7 +182,6 @@ public class LoginActivity extends AppCompatActivity
     public void setSpanish()
     {
         toolbar.setTitle("ACCEDE O REGISTRATE");
-        information.setText("");
         login.setText("Accede");
         signup.setText("Registrate");
         passwordLogin.setHint("Contraseña");
@@ -194,11 +190,34 @@ public class LoginActivity extends AppCompatActivity
     public void setEnglish()
     {
         toolbar.setTitle("SIGN UP OR LOGIN");
-        information.setText("");
         login.setText("LOGIN");
         signup.setText("SIGN UP");
         passwordLogin.setHint("Password");
         passwordSignup.setHint("Password");
+    }
+    public void showAlert(String title, String message)
+    {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("CLOSE", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which)
+                    {}
+                })
+                .setIcon(R.drawable.ic_alert)
+                .show();
+    }
+    public void showInformation(String title, String message)
+    {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("CLOSE", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which)
+                    {}
+                })
+                .setIcon(R.drawable.ic_info)
+                .show();
     }
 }
 

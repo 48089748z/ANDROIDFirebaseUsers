@@ -14,7 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="95dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Information"
         android:id="@+id/TVinformation"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
