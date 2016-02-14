@@ -8,11 +8,11 @@ import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.Image;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -67,7 +67,11 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
                 newNote.setDescription(description.getText().toString());
                 newNote.setLatitude(String.valueOf(loc.getLatitude()));
                 newNote.setLongitude(String.valueOf(loc.getLongitude()));
-                if (tookPhoto) {newNote.setImagePath(getLastPhotoPath());}
+                if (tookPhoto)
+                {
+                    newNote.setImagePath(getLastPhotoPath());
+                    //newNote.setCodedImage(codeImage(getLastPhotoPath())); FULLY SAVE IMAGES IN FIREBASE MAKES YOU RUN OUT OF MEMORY
+                }
                 addNoteToFireBase(newNote);
             }
         });
@@ -93,7 +97,6 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
         fnote.setValue(note);
         this.finish();
     }
-
     public void onStart()
     {
         super.onStart();
@@ -131,5 +134,19 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    public String codeImage(String path) //FULLY SAVE IMAGES IN FIREBASE MAKES YOU RUN OUT OF MEMORY
+    {
+        File imagePath = new  File(path);
+        if(imagePath.exists())
+        {
+            Bitmap imageBitmap = BitmapFactory.decodeFile(imagePath.getAbsolutePath());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            imageBitmap.recycle();
+            byte[] byteArray = baos.toByteArray();
+            return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        }
+        return null;
     }
 }

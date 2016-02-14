@@ -7,13 +7,16 @@ import java.util.List;
 /**
  * Created by 48089748z on 10/02/16.
  */
-public class Note {
-    @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Note
+{
+    //@JsonIgnoreProperties(ignoreUnknown = true)
     private List<Note> notesList;
     private String title;
     private String description;
     private String latitude;
     private String longitude;
+    private String codedImage;
     private String imagePath;
     public Note() {
     }
@@ -48,12 +51,12 @@ public class Note {
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
-    public String getImagePath() {
-        return imagePath;
+    public String getCodedImage() {
+        return codedImage;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setCodedImage(String codedImage) {
+        this.codedImage = codedImage;
     }
 
     public List<Note> getNotesList() {
@@ -62,5 +65,13 @@ public class Note {
 
     public void setNotesList(List<Note> notesList) {
         this.notesList = notesList;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

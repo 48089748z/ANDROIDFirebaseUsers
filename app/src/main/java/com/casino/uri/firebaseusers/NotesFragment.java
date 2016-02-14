@@ -1,6 +1,9 @@
 package com.casino.uri.firebaseusers;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +42,14 @@ public class NotesFragment extends Fragment
                 try
                 {
                     File imagePath = new File(note.getImagePath());
-                    Picasso.with(getContext()).load(imagePath).centerCrop().resize(185, 185).into(image);
-                } catch (Exception e){}
+                    if (imagePath.exists()) {Picasso.with(getContext()).load(imagePath).centerCrop().resize(185, 185).into(image);}
+                    else{Picasso.with(getContext()).load(R.drawable.ic_alert).centerCrop().resize(185, 185).into(image);}
+                    //image.setImageBitmap(decodeImage(note.getCodedImage()));  FULLY SAVE IMAGES IN FIREBASE MAKES YOU RUN OUT OF MEMORY
+                }
+                catch (Exception e)
+                {
+                    Picasso.with(getContext()).load(R.drawable.ic_alert).centerCrop().resize(185, 185).into(image);
+                }
                 if (config.getLanguage().equals("SPANISH")) {latlng.setText("Latitud: " + note.getLatitude() + "\nLongitud: " + note.getLongitude());}
                 else {latlng.setText("Latitude: " + note.getLatitude() + "\nLongitude: " + note.getLongitude());}
             }
@@ -49,5 +58,10 @@ public class NotesFragment extends Fragment
         return view;
     }
     public NotesFragment() {
+    }
+    public Bitmap decodeImage(String toDecode) //FULLY SAVE IMAGES IN FIREBASE MAKES YOU RUN OUT OF MEMORY
+    {
+        byte[] decodedString = Base64.decode(toDecode, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 }
