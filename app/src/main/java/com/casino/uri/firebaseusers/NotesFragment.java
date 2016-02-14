@@ -36,7 +36,8 @@ public class NotesFragment extends Fragment
                 ImageView image = (ImageView) view.findViewById(R.id.IVimage);
                 title.setText(note.getTitle());
                 description.setText(note.getDescription());
-                try {
+                try
+                {
                     File imagePath = new File(note.getImagePath());
                     Picasso.with(getContext()).load(imagePath).centerCrop().resize(185, 185).into(image);
                 } catch (Exception e){}

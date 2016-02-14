@@ -3,9 +3,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.Image;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +21,7 @@ import android.widget.TextView;
 import com.firebase.client.Firebase;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 public class NewNoteActivity extends AppCompatActivity  implements LocationListener
@@ -63,7 +67,7 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
                 newNote.setDescription(description.getText().toString());
                 newNote.setLatitude(String.valueOf(loc.getLatitude()));
                 newNote.setLongitude(String.valueOf(loc.getLongitude()));
-                newNote.setImagePath(getLastPhotoPath());
+                if (tookPhoto) {newNote.setImagePath(getLastPhotoPath());}
                 addNoteToFireBase(newNote);
             }
         });
@@ -74,7 +78,8 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
         Intent openCamera = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
         startActivity(openCamera);
     }
-    public String getLastPhotoPath() {
+    public String getLastPhotoPath()
+    {
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = this.managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
         int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);

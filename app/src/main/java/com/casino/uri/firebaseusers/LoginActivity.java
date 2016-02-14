@@ -178,12 +178,16 @@ public class LoginActivity extends AppCompatActivity
         int id = item.getItemId();
         if (id == R.id.action_english)
         {
+            emailLogin.setText("48089748z@iespoblenou.org"); //THIS IS FOR TESTING, MUST BE REMOVED
+            passwordLogin.setText("password");               //THIS IS FOR TESTING, MUST BE REMOVED
             config.setLanguage("ENGLISH");
             setEnglish();
             return true;
         }
         if (id == R.id.action_spanish)
         {
+            emailLogin.setText("oriolcunado@gmail.com");     //THIS IS FOR TESTING, MUST BE REMOVED
+            passwordLogin.setText("password");               //THIS IS FOR TESTING, MUST BE REMOVED
             config.setLanguage("SPANISH");
             setSpanish();
 
