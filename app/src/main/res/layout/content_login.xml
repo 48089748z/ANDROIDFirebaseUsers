@@ -16,16 +16,16 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/TVinformation"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SIGN UP"
         android:id="@+id/BTsignup"
-        android:layout_above="@+id/TVinformation"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/TVinformation" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -33,10 +33,10 @@
         android:id="@+id/ETpasswordSignup"
         android:layout_above="@+id/BTsignup"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/TVinformation"
         android:hint="Password"
         android:inputType="textPassword"
-        android:maxLines="1"/>
+        android:maxLines="1"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
         android:hint="Email"
         android:layout_above="@+id/ETpasswordSignup"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/ETpasswordSignup" />
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
         android:id="@+id/TVespacer"
         android:layout_above="@+id/ETemailSignup"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/ETemailSignup" />
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
         android:id="@+id/BTlogin"
         android:layout_above="@+id/TVespacer"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_alignParentEnd="false" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -72,9 +72,9 @@
         android:hint="Password"
         android:layout_above="@+id/BTlogin"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/TVespacer"
         android:inputType="textPassword"
-        android:maxLines="1"/>
+        android:maxLines="1"
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -83,8 +83,8 @@
         android:hint="Email"
         android:layout_above="@+id/ETpasswordLogin"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/ETpasswordLogin"
-        android:maxLines="1"/>
+        android:maxLines="1"
+        android:layout_alignParentEnd="true" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -92,8 +92,8 @@
         android:id="@+id/IVlogo"
         android:layout_above="@+id/ETemailLogin"
         android:layout_alignParentStart="true"
+        android:src="@drawable/flamingtext_logo"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/ETemailLogin"
-        android:src="@drawable/flamingtext_logo" />
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

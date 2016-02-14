@@ -9,8 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -22,6 +26,10 @@ public class LoginActivity extends AppCompatActivity
     ProgressDialog progress;
     Boolean userIsSavedOnFireBase = false;
     ArrayList<User> usersList = new ArrayList<>();
+    ArrayList<String> existingUsers = new ArrayList<>();
+    ArrayAdapter<String> adapter;
+
+   // ListView autocomplete;
     Button login;
     Button signup;
     Toolbar toolbar;
@@ -29,6 +37,7 @@ public class LoginActivity extends AppCompatActivity
     EditText passwordLogin;
     EditText emailSignup;
     EditText passwordSignup;
+
     FirebaseConfig config;
     Firebase mainReference;
     Firebase usersListReference;
@@ -44,10 +53,6 @@ public class LoginActivity extends AppCompatActivity
         usersListReference = config.getUsersListReference();
         toolbar.setTitle("LOGIN OR SIGN UP");
         setSupportActionBar(toolbar);
-        progress = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
-        progress.setTitle("           LOGGING IN");
-        progress.setMessage("Please wait a few seconds...");
-        progress.setCancelable(false);
         emailLogin = (EditText) this.findViewById(R.id.ETemailLogin);
         passwordLogin = (EditText) this.findViewById(R.id.ETpasswordLogin);
         emailSignup = (EditText) this.findViewById(R.id.ETemailSignup);
@@ -55,6 +60,11 @@ public class LoginActivity extends AppCompatActivity
         login = (Button) this.findViewById(R.id.BTlogin);
         signup = (Button) this.findViewById(R.id.BTsignup);
 
+        adapter = new ArrayAdapter<>(this, 0, existingUsers);
+        progress = new ProgressDialog(this, ProgressDialog.STYLE_SPINNER);
+        progress.setTitle("           LOGGING IN");
+        progress.setMessage("Please wait a few seconds...");
+        progress.setCancelable(false);
         usersListReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -63,6 +73,7 @@ public class LoginActivity extends AppCompatActivity
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren())
                 {
                     User user = userSnapshot.getValue(User.class);
+                    existingUsers.add(user.getEmail());
                     usersList.add(user);
                 }
             }
@@ -148,8 +159,9 @@ public class LoginActivity extends AppCompatActivity
     protected void onStart()
     {
         super.onStart();
+        //autocomplete.setVisibility(View.INVISIBLE);
         progress.hide();
-        emailLogin.setText("48089748z@iespoblenou.org");
+        emailLogin.setHint("Email");
         emailSignup.setHint("Email");
         if (config.getLanguage().equals("SPANISH"))
         {
@@ -216,7 +228,7 @@ public class LoginActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int which)
                     {}
                 })
-                .setIcon(R.drawable.ic_info)
+                .setIcon(R.drawable.ic_information)
                 .show();
     }
 }
