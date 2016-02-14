@@ -115,6 +115,7 @@ public class LoginActivity extends AppCompatActivity
                     {
                         config.setLoggedUserReference(usersListReference.child(usersList.get(x).getKey()));
                         userIsSavedOnFireBase = true;
+                        break;
                     }
                     else
                     {
