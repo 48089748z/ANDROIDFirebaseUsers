@@ -86,12 +86,12 @@ public class LoginActivity extends AppCompatActivity
                     @Override
                     public void onSuccess()
                     {
-                        showInformation("DONE", "Succesfully Created User.");
+                        showInformation("     DONE", "Succesfully Created User.");
                     }
                     @Override
                     public void onError(FirebaseError firebaseError)
                     {
-                        showAlert("ERROR", firebaseError.getMessage());
+                        showAlert("    ERROR", firebaseError.getMessage());
                     }
                 });
             }
@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onAuthenticationError(FirebaseError firebaseError)
             {
-                showAlert("ERROR", firebaseError.getMessage());
+                showAlert("    ERROR", firebaseError.getMessage());
             }
         });
     }
