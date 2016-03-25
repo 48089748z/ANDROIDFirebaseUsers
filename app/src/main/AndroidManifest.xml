@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.casino.uri.firebaseusers" >
 
-    <!--
+    <!-- TESTING FACEBOOK TWITTER & GOOGLE LOGINS
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -16,7 +16,7 @@
     <application
         android:name=".FirebaseConfig"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_user"
+        android:icon="@mipmap/ic_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
@@ -36,13 +36,13 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="Records"
+            android:label="Your Regrams"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 
         <activity
             android:name=".NewNoteActivity"
-            android:label="New Record">
+            android:label="New Regram">
         </activity>
     </application>
 

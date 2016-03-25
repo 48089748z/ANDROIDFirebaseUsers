@@ -27,7 +27,9 @@ import java.io.File;
 public class NewNoteActivity extends AppCompatActivity  implements LocationListener
 {
     FirebaseConfig config;
-    boolean tookPhoto = false;
+    boolean photo = false;
+    boolean video = false;
+    boolean audio = false;
     Location loc;
     ProgressDialog dialog;
     ImageView takenPhoto;
@@ -67,26 +69,33 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
                 newNote.setDescription(description.getText().toString());
                 newNote.setLatitude(String.valueOf(loc.getLatitude()));
                 newNote.setLongitude(String.valueOf(loc.getLongitude()));
-                if (tookPhoto)
+                if (photo)
                 {
                     newNote.setImagePath(getLastPhotoPath());
                     //newNote.setCodedImage(codeImage(getLastPhotoPath())); FULLY SAVE IMAGES IN FIREBASE MAKES YOU RUN OUT OF MEMORY
+                }
+                if (video)
+                {
+                    newNote.setVideoPath(getLastVideoPath());
                 }
                 addNoteToFireBase(newNote);
             }
         });
     }
-    public void openCamera()
-    {
-        tookPhoto = true;
-        Intent openCamera = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-        startActivity(openCamera);
-    }
+
     public String getLastPhotoPath()
     {
         String[] projection = { MediaStore.Images.Media.DATA };
         Cursor cursor = this.managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
         int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToLast();
+        return cursor.getString(column_index_data);
+    }
+    public String getLastVideoPath()
+    {
+        String[] projection = { MediaStore.Video.Media.DATA };
+        Cursor cursor = this.managedQuery(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
+        int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
         cursor.moveToLast();
         return cursor.getString(column_index_data);
     }
@@ -100,7 +109,7 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
     public void onStart()
     {
         super.onStart();
-        if (tookPhoto)
+        if (photo)
         {
             File imagePath = new File(getLastPhotoPath());
             Picasso.with(this).load(imagePath).centerCrop().resize(230, 290).into(takenPhoto);
@@ -129,13 +138,29 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_takephoto) {
-            openCamera();
+        if (id == R.id.action_takephoto)
+        {
+            photo = true;
+            Intent openCamera = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+            startActivity(openCamera);
             return true;
         }
+        if (id == R.id.action_takevideo)
+        {
+            video = true;
+            Intent openCamera = new Intent(MediaStore.INTENT_ACTION_VIDEO_CAMERA);
+            startActivity(openCamera);
+            return true;
+        }
+        if (id == R.id.action_takeaudio)
+        {
+            audio = true;
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
-    public String codeImage(String path) //FULLY SAVE IMAGES IN FIREBASE MAKES YOU RUN OUT OF MEMORY
+    public String codeImage(String path) //THIS METHOD IS TO CONVERT AND SAVE THE IMAGE IN FIREBASE, IT WORKS PROPERLY BUT IF YOU USE IT YOU WILL RUN OUT OF MEMORY IN FIREBASE
     {
         File imagePath = new  File(path);
         if(imagePath.exists())

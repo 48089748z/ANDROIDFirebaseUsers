@@ -34,16 +34,9 @@ public class MainActivity extends AppCompatActivity
     }
     private void setupViewPager(CustomViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        if (config.getLanguage().equals("SPANISH"))
-        {
-            adapter.addFragment(new NotesFragment(), "NOTAS");
-            adapter.addFragment(new MapFragment(), "MAPA");
-        }
-        else
-        {
-            adapter.addFragment(new NotesFragment(), "NOTES");
-            adapter.addFragment(new MapFragment(), "MAP");
-        }
+        adapter.addFragment(new NotesFragment(), "REGRAMS");
+        if (config.getLanguage().equals("SPANISH")) {adapter.addFragment(new MapFragment(), "MAPA");}
+        else {adapter.addFragment(new MapFragment(), "MAP");}
         viewPager.setAdapter(adapter);
         viewPager.setPagingEnabled(false);
     }

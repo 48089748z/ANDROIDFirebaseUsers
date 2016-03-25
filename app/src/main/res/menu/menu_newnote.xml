@@ -5,7 +5,19 @@
     <item
         android:id="@+id/action_takephoto"
         android:orderInCategory="100"
-        android:title="Camera"
+        android:title="Photo"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_photo" />
+    <item
+        android:id="@+id/action_takevideo"
+        android:orderInCategory="100"
+        android:title="Video"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_video" />
+    <item
+        android:id="@+id/action_takeaudio"
+        android:orderInCategory="100"
+        android:title="Audio"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_audio" />
 </menu>
