@@ -21,8 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".LoginActivity"
-            android:label="Firebase Users"
+            android:name=".SplashScreen"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,14 +30,19 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".LoginActivity"
+            android:label="Login"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
             android:name=".MainActivity"
-            android:label="Mapped Notes"
+            android:label="Records"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 
         <activity
             android:name=".NewNoteActivity"
-            android:label="Mapped Notes">
+            android:label="New Record">
         </activity>
     </application>
 

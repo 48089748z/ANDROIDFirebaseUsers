@@ -18,6 +18,8 @@ public class Note
     private String longitude;
     private String codedImage;
     private String imagePath;
+    private String videoPath;
+    private String audioPath;
     public Note() {
     }
     public String getTitle() {
@@ -73,5 +75,21 @@ public class Note
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public String getVideoPath() {
+        return videoPath;
+    }
+
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
+    }
+
+    public String getAudioPath() {
+        return audioPath;
+    }
+
+    public void setAudioPath(String audioPath) {
+        this.audioPath = audioPath;
     }
 }
