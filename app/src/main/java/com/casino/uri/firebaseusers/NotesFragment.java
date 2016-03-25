@@ -1,12 +1,17 @@
 package com.casino.uri.firebaseusers;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,7 +31,7 @@ public class NotesFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ListView notesList = (ListView) view.findViewById(R.id.LVnotes);
+        ListView regramsList = (ListView) view.findViewById(R.id.LVnotes);
         config  = (FirebaseConfig) getActivity().getApplication();
         Firebase loggedUserNotesReference = config.getLoggedUserReference().child("NotesList");
         FirebaseListAdapter<Note> adapter = new FirebaseListAdapter<Note>(getActivity(), Note.class, R.layout.listview_layout, loggedUserNotesReference) {
@@ -54,8 +59,44 @@ public class NotesFragment extends Fragment
                 else {latlng.setText("Latitude: " + note.getLatitude() + "\nLongitude: " + note.getLongitude());}
             }
         };
-        notesList.setAdapter(adapter);
+        regramsList.setAdapter(adapter);
+        regramsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                choiceWindow(position);
+            }
+        });
         return view;
+    }
+    public void choiceWindow(final int position)
+    {
+        new AlertDialog.Builder(getContext())
+                .setTitle("   WHAT YO PLAY?")
+                .setPositiveButton("Audio", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        openAudio();
+                    }
+                })
+                .setNegativeButton("Video", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which){
+                        openVideo(position);
+                    }
+                })
+                .setIcon(R.drawable.ic_alert)
+                .show();
+    }
+    public void openVideo(int position)
+    {
+        Intent videoPlayer = new Intent(getContext(), VideoPlayer.class);
+        videoPlayer.putExtra("position", position);
+        startActivity(videoPlayer);
+    }
+    public void openAudio()
+    {
+        Intent openRecorder = new Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER);
+        startActivity(openRecorder);
     }
     public NotesFragment() {
     }

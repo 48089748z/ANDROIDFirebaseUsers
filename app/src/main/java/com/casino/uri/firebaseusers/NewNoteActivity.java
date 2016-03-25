@@ -78,6 +78,10 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
                 {
                     newNote.setVideoPath(getLastVideoPath());
                 }
+                if (audio)
+                {
+                    newNote.setAudioPath(getLastAudioPath());
+                }
                 addNoteToFireBase(newNote);
             }
         });
@@ -96,6 +100,14 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
         String[] projection = { MediaStore.Video.Media.DATA };
         Cursor cursor = this.managedQuery(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
         int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+        cursor.moveToLast();
+        return cursor.getString(column_index_data);
+    }
+    public String getLastAudioPath()
+    {
+        String[] projection = { MediaStore.Audio.Media.DATA };
+        Cursor cursor = this.managedQuery(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
+        int column_index_data = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
         cursor.moveToLast();
         return cursor.getString(column_index_data);
     }
@@ -155,6 +167,8 @@ public class NewNoteActivity extends AppCompatActivity  implements LocationListe
         if (id == R.id.action_takeaudio)
         {
             audio = true;
+            Intent openRecorder = new Intent(MediaStore.INTENT_ACTION_MUSIC_PLAYER);
+            startActivity(openRecorder);
             return true;
         }
 

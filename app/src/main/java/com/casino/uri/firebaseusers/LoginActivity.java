@@ -117,20 +117,20 @@ public class LoginActivity extends AppCompatActivity
             public void onAuthenticated(AuthData authData)
             {
                 progress.show();
-                for (int x = 0; x < usersList.size(); x++)
+                for (int x = 0; x < usersList.size(); x++) //PARA CADA USUARIO GUARDADO MIRAMOS SI SU UID EXISTE
                 {
-                    if (usersList.get(x).getUID().equals(authData.getUid()))
+                    if (usersList.get(x).getUID().equals(authData.getUid())) //SI ESA UID EXISTE, ESE USUARIO EXISTE
                     {
-                        config.setLoggedUserReference(usersListReference.child(usersList.get(x).getKey()));
+                        config.setLoggedUserReference(usersListReference.child(usersList.get(x).getKey())); //POR LO TANTO COMO HA SIDO AUTENTICADO LE DAMOS LA NUEVA REF DE FIREBASE
                         userIsSavedOnFireBase = true;
-                        break;
+                        break;         // Y BREAK
                     }
                     else
                     {
-                        userIsSavedOnFireBase = false;
+                        userIsSavedOnFireBase = false; //SI NO EXISTE ESTO ES FALSE Y ENTRARA EN EL IF DE ABAJO
                     }
                 }
-                if (!userIsSavedOnFireBase)
+                if (!userIsSavedOnFireBase) //ESTE IF DEBERIA SIMPLEMENTE IR DENTRO DE EL ELSE DE ARRIBA PERO NO VA BIEN HACER ESO XQ SE EJECUTA EN SEGUNDO PLANO LO DE ARRIBA
                 {
                     Firebase userF = usersListReference.push();
                     User newUser = new User();
